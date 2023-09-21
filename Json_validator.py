@@ -6,13 +6,28 @@ def validate_jsonl_object(json_obj):
         return False
     return True
 
-# Open the JSONL file for reading
-with open("your_file.jsonl", "r") as f:
-    for line in f:
-        json_obj = json.loads(line.strip())
-        
-        # Validate the JSON object
-        if not validate_jsonl_object(json_obj):
-            print(f"Validation failed for object: {json_obj}")
+# Initialize row count
+row_count = 0
 
-# If the script finishes without printing anything, validation passed for all objects
+# Get file path from the user
+file_path = input("Please enter the path to your JSONL file: ")
+
+# Open the JSONL file for reading
+try:
+    with open(file_path, "r") as f:
+        for line in f:
+            row_count += 1
+            json_obj = json.loads(line.strip())
+            
+            # Validate the JSON object
+            if not validate_jsonl_object(json_obj):
+                print(f"Validation failed for object at row {row_count}: {json_obj}")
+
+    # Print the total row count
+    print(f"Validation completed. Total rows processed: {row_count}")
+
+# Handle file not found error
+except FileNotFoundError:
+    print(f"File at path {file_path} was not found. Please check the path and try again.")
+
+# If the script finishes without any other print statements, validation passed for all objects
